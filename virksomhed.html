@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tilmeld din butik — Åbentbutik.dk</title>
+  <meta name="description" content="Tilmeld din butik på Åbentbutik.dk og lad dine kunder se dine åbningstider — helt gratis."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:#0e0e0d;--ink-2:#444;--ink-3:#888;--ink-4:#bbb;
+      --green:#1c7a5e;--green-bg:#eaf5f0;--green-dark:#104a38;
+      --line:#e8e8e4;--line-mid:#d4d4ce;
+      --surface:#fff;--page:#f5f5f1;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.06),0 3px 10px rgba(0,0,0,.04);
+      --shadow-md:0 2px 4px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+    }
+    body{font-family:'DM Sans',sans-serif;background:var(--page);color:var(--ink);font-size:15px;line-height:1.6;}
+
+    nav{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;}
+    .nav-inner{max-width:1040px;margin:0 auto;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{font-family:'Fraunces',serif;font-size:21px;font-weight:300;color:var(--ink);text-decoration:none;}
+    .logo i{font-style:italic;color:var(--green);}
+    .back{font-size:13px;font-weight:500;color:var(--ink-3);text-decoration:none;display:flex;align-items:center;gap:6px;}
+    .back:hover{color:var(--ink);}
+
+    /* HERO */
+    .hero{background:var(--ink);padding:5rem 2rem 4.5rem;text-align:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 100%,rgba(28,122,94,0.25) 0%,transparent 70%);pointer-events:none;}
+    .hero-kicker{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:1rem;position:relative;}
+    .hero h1{font-family:'Fraunces',serif;font-size:clamp(36px,5.5vw,58px);font-weight:300;line-height:1.1;letter-spacing:-1px;color:#fff;margin-bottom:1.25rem;position:relative;}
+    .hero h1 i{font-style:italic;color:#6edbb8;}
+    .hero-sub{font-size:17px;color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto 2.5rem;line-height:1.65;position:relative;}
+    .hero-cta{display:inline-block;background:var(--green);color:#fff;font-size:15px;font-weight:600;padding:14px 32px;border-radius:9px;text-decoration:none;font-family:'DM Sans',sans-serif;transition:background 0.15s;position:relative;}
+    .hero-cta:hover{background:var(--green-dark);}
+    .hero-note{font-size:13px;color:rgba(255,255,255,0.35);margin-top:12px;position:relative;}
+
+    /* FEATURES */
+    .features{max-width:1040px;margin:3rem auto;padding:0 2rem;}
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+    .feat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.5rem;box-shadow:var(--shadow-sm);}
+    .feat-icon{width:42px;height:42px;border-radius:10px;background:var(--green-bg);display:grid;place-items:center;font-size:20px;margin-bottom:1rem;}
+    .feat-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+    .feat-text{font-size:13px;color:var(--ink-2);line-height:1.6;}
+
+    /* SECTION TITLE */
+    .sec{max-width:1040px;margin:0 auto;padding:0 2rem;}
+    .sec-title{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:var(--ink);margin-bottom:0.5rem;}
+    .sec-title i{font-style:italic;color:var(--green);}
+    .sec-sub{font-size:15px;color:var(--ink-2);margin-bottom:2rem;}
+
+    /* FORM CARD */
+    .form-wrap{max-width:1040px;margin:0 auto 4rem;padding:0 2rem;display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;}
+    .form-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:2rem;box-shadow:var(--shadow-md);}
+    .form-title{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--ink);margin-bottom:1.5rem;}
+    .form-title i{font-style:italic;}
+
+    .fgroup{margin-bottom:1.25rem;}
+    .flabel{font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px;}
+    .flabel .req{color:var(--green);}
+    .finput{width:100%;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--line-mid);border-radius:8px;color:var(--ink);background:var(--surface);transition:border-color 0.15s;}
+    .finput:focus{outline:none;border-color:var(--green);}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .fselect{width:100%;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--line-mid);border-radius:8px;color:var(--ink);background:var(--surface);appearance:none;cursor:pointer;}
+    .fselect:focus{outline:none;border-color:var(--green);}
+    .fdivider{border:none;border-top:1px solid var(--line);margin:1.5rem 0;}
+
+    /* HOURS TABLE */
+    .hours-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;}
+    .hrow{display:grid;grid-template-columns:80px 1fr 1fr 44px;gap:8px;align-items:center;}
+    .hday-label{font-size:13px;font-weight:500;color:var(--ink-2);}
+    .hday-label.bold{font-weight:600;color:var(--ink);}
+    .htime-in{width:100%;padding:8px 10px;font-size:13px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--line-mid);border-radius:7px;color:var(--ink);text-align:center;}
+    .htime-in:focus{outline:none;border-color:var(--green);}
+    .htime-in:disabled{background:#f5f5f5;color:var(--ink-4);}
+    .toggle{width:36px;height:20px;border-radius:10px;background:var(--line-mid);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+    .toggle.on{background:var(--green);}
+    .toggle::after{content:'';width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+    .toggle.on::after{left:19px;}
+    .hours-head{display:grid;grid-template-columns:80px 1fr 1fr 44px;gap:8px;margin-bottom:4px;}
+    .h-col-label{font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-4);text-align:center;}
+    .h-col-label:first-child{text-align:left;}
+
+    /* HOLIDAY SECTION */
+    .holiday-note{background:var(--green-bg);border:1px solid rgba(28,122,94,0.2);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:13px;color:var(--green-dark);line-height:1.6;}
+    .holiday-note strong{font-weight:600;}
+    .hol-grid{display:flex;flex-direction:column;gap:8px;}
+    .hol-row{display:grid;grid-template-columns:140px 1fr 1fr 44px;gap:8px;align-items:center;}
+    .hol-name{font-size:13px;color:var(--ink-2);}
+    .hol-date{font-size:11px;color:var(--ink-3);margin-top:1px;}
+
+    /* SUBMIT */
+    .submit-btn{width:100%;padding:14px;background:var(--green);color:#fff;font-size:15px;font-weight:600;border:none;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s;margin-top:0.5rem;}
+    .submit-btn:hover{background:var(--green-dark);}
+    .form-disclaimer{font-size:12px;color:var(--ink-3);text-align:center;margin-top:10px;line-height:1.5;}
+
+    /* ASIDE */
+    .aside{display:flex;flex-direction:column;gap:1rem;}
+    .aside-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.5rem;box-shadow:var(--shadow-sm);}
+    .aside-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+    .aside-list{display:flex;flex-direction:column;gap:10px;}
+    .aside-item{display:flex;gap:10px;align-items:flex-start;}
+    .aside-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px;}
+    .aside-text{font-size:13px;color:var(--ink-2);line-height:1.5;}
+    .price-box{background:var(--ink);border-radius:14px;padding:1.5rem;color:#fff;}
+    .price-tag{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px;}
+    .price-num{font-family:'Fraunces',serif;font-size:42px;font-weight:300;color:#fff;letter-spacing:-1px;line-height:1;}
+    .price-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;margin-bottom:1rem;}
+    .price-feat{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;}
+    .pf{font-size:13px;color:rgba(255,255,255,0.7);display:flex;gap:8px;align-items:flex-start;}
+    .pf::before{content:'✓';color:#6edbb8;font-weight:600;flex-shrink:0;}
+    .price-note{font-size:12px;color:rgba(255,255,255,0.35);text-align:center;}
+
+    /* SUCCESS */
+    .success{display:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:3rem 2rem;text-align:center;box-shadow:var(--shadow-md);}
+    .success.show{display:block;}
+    .success-icon{font-size:48px;margin-bottom:1rem;}
+    .success-title{font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:8px;}
+    .success-title i{font-style:italic;color:var(--green);}
+    .success-sub{font-size:15px;color:var(--ink-2);max-width:400px;margin:0 auto;}
+
+    /* FOOTER */
+    footer{background:var(--surface);border-top:1px solid var(--line);padding:2rem;text-align:center;}
+    .foot-brand{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--ink);}
+    .foot-brand i{font-style:italic;color:var(--green);}
+    .foot-sub{font-size:13px;color:var(--ink-3);margin-top:4px;}
+
+    @media(max-width:700px){.feat-grid{grid-template-columns:1fr}.form-wrap{grid-template-columns:1fr}.aside{display:none}.frow{grid-template-columns:1fr}.hrow,.hol-row{grid-template-columns:70px 1fr 1fr 36px}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">åbent<i>butik</i></a>
+    <a href="index.html" class="back">← Tilbage til forsiden</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-kicker">For virksomheder</div>
+  <h1>Lad dine kunder vide,<br>hvornår du er <i>åben</i></h1>
+  <p class="hero-sub">Tilmeld din butik gratis og hold tusindvis af kunder opdateret — også på helligdage og i ferier.</p>
+  <a href="#opret" class="hero-cta">Opret din butik gratis</a>
+  <div class="hero-note">Ingen kreditkort. Ingen binding.</div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">🕐</div>
+      <div class="feat-title">Du bestemmer selv</div>
+      <div class="feat-text">Opdater dine åbningstider når som helst — særlige åbningstider til helligdage ændres med få klik.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">👁️</div>
+      <div class="feat-title">Synlig for alle</div>
+      <div class="feat-text">Din butik vises til kunder der søger i dit område — og du dukker op i vores helligdagsoversigter.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔔</div>
+      <div class="feat-title">Automatiske påmindelser</div>
+      <div class="feat-text">Vi minder dig automatisk inden hver helligdag, så du ikke glemmer at opdatere dine åbningstider.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<div class="form-wrap" id="opret">
+  <div>
+    <div class="form-card" id="formCard">
+      <div class="form-title">Opret din butik</div>
+
+      <!-- Butiksinformation -->
+      <div class="flabel">Butiksinformation</div>
+      <div class="fgroup">
+        <label class="flabel">Butiksnavn <span class="req">*</span></label>
+        <input class="finput" type="text" placeholder="fx Min Lokale Butik" id="storeName"/>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Kategori <span class="req">*</span></label>
+          <select class="fselect" id="storeCat">
+            <option value="">Vælg kategori</option>
+            <option>Dagligvarer</option>
+            <option>Apotek & pleje</option>
+            <option>Elektronik</option>
+            <option>Tøj & mode</option>
+            <option>Café & restaurant</option>
+            <option>Sport & fritid</option>
+            <option>Bolig & indretning</option>
+            <option>Andet</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Telefonnummer</label>
+          <input class="finput" type="tel" placeholder="12 34 56 78"/>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel">Adresse <span class="req">*</span></label>
+          <input class="finput" type="text" placeholder="Gade og husnummer" id="storeAddr"/>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">By & postnummer <span class="req">*</span></label>
+          <input class="finput" type="text" placeholder="2200 København N"/>
+        </div>
+      </div>
+
+      <hr class="fdivider"/>
+
+      <!-- Normale åbningstider -->
+      <div class="flabel" style="margin-bottom:8px">Normale åbningstider <span class="req">*</span></div>
+      <div class="hours-head">
+        <div class="h-col-label">Dag</div>
+        <div class="h-col-label">Åbner</div>
+        <div class="h-col-label">Lukker</div>
+        <div class="h-col-label">Åben?</div>
+      </div>
+      <div class="hours-grid" id="hoursGrid"></div>
+
+      <hr class="fdivider"/>
+
+      <!-- Helligdage -->
+      <div class="flabel" style="margin-bottom:8px">Åbningstider på helligdage</div>
+      <div class="holiday-note">
+        <strong>Tip:</strong> Udfyld kun de helligdage der afviger fra dine normale åbningstider. Lader du et felt stå tomt, vises dine normale tider.
+      </div>
+      <div class="hours-head" style="grid-template-columns:140px 1fr 1fr 44px;">
+        <div class="h-col-label">Helligdag</div>
+        <div class="h-col-label">Åbner</div>
+        <div class="h-col-label">Lukker</div>
+        <div class="h-col-label">Åben?</div>
+      </div>
+      <div class="hol-grid" id="holGrid"></div>
+
+      <hr class="fdivider"/>
+
+      <!-- Kontaktoplysninger -->
+      <div class="flabel" style="margin-bottom:12px">Kontaktoplysninger til profil</div>
+      <div class="fgroup">
+        <label class="flabel">Website</label>
+        <input class="finput" type="url" placeholder="https://minbutik.dk"/>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Din e-mail (til bekræftelse) <span class="req">*</span></label>
+        <input class="finput" type="email" placeholder="dig@minbutik.dk" id="ownerEmail"/>
+      </div>
+
+      <button class="submit-btn" onclick="submit()">Opret min butik gratis →</button>
+      <div class="form-disclaimer">Ved at tilmelde dig accepterer du vores vilkår og betingelser. Du kan til enhver tid slette din profil.</div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success" id="successCard">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Din butik er <i>oprettet!</i></div>
+      <div class="success-sub">Vi sender en bekræftelse til din e-mail. Din butik vises på åbentbutik.dk inden for 24 timer.</div>
+    </div>
+  </div>
+
+  <!-- ASIDE -->
+  <aside class="aside">
+    <div class="price-box">
+      <div class="price-tag">Pris</div>
+      <div class="price-num">Gratis</div>
+      <div class="price-sub">For altid. Ingen skjulte gebyrer.</div>
+      <div class="price-feat">
+        <div class="pf">Synlig for alle besøgende</div>
+        <div class="pf">Rediger åbningstider når som helst</div>
+        <div class="pf">Helligdagspåmindelser via e-mail</div>
+        <div class="pf">Direkte link til Google Maps</div>
+        <div class="pf">Statistik over visninger</div>
+      </div>
+      <div class="price-note">Premium-funktioner kommer snart</div>
+    </div>
+
+    <div class="aside-card">
+      <div class="aside-title">Hvorfor tilmelde sig?</div>
+      <div class="aside-list">
+        <div class="aside-item"><div class="aside-dot"></div><div class="aside-text">Undgå frustrerede kunder der møder op til en lukket butik</div></div>
+        <div class="aside-item"><div class="aside-dot"></div><div class="aside-text">Vis præcis hvornår du har åbent — også på uventede lukkedage</div></div>
+        <div class="aside-item"><div class="aside-dot"></div><div class="aside-text">Kunder søger aktivt efter åbningstider på helligdage</div></div>
+        <div class="aside-item"><div class="aside-dot"></div><div class="aside-text">Du styrer selv dine data — ingen andre kan ændre dem</div></div>
+      </div>
+    </div>
+
+    <div class="aside-card">
+      <div class="aside-title">Spørgsmål?</div>
+      <div style="font-size:13px;color:var(--ink-2);line-height:1.6;">
+        Skriv til os på <a href="mailto:kontakt@åbentbutik.dk" style="color:var(--green);font-weight:600;">kontakt@åbentbutik.dk</a> — vi svarer inden for 24 timer.
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="foot-brand">åbent<i>butik</i></div>
+  <div class="foot-sub">© 2026 Åbentbutik.dk — Bygget i Danmark 🇩🇰</div>
+</footer>
+
+<script>
+const days=['Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag','Søndag'];
+const defaultOpen=['08:00','08:00','08:00','08:00','08:00','10:00',null];
+const defaultClose=['18:00','18:00','18:00','18:00','18:00','16:00',null];
+const holidays=[
+  {name:'Nytårsdag',date:'1. jan'},
+  {name:'Skærtorsdag',date:'17. apr'},
+  {name:'Langfredag',date:'18. apr'},
+  {name:'Påskedag',date:'20. apr'},
+  {name:'2. påskedag',date:'21. apr'},
+  {name:'Store bededag',date:'9. maj'},
+  {name:'Kristi himmelfart',date:'29. maj'},
+  {name:'Pinsedag',date:'8. jun'},
+  {name:'2. pinsedag',date:'9. jun'},
+  {name:'Juleaften',date:'24. dec'},
+  {name:'1. juledag',date:'25. dec'},
+  {name:'2. juledag',date:'26. dec'},
+  {name:'Nytårsaften',date:'31. dec'},
+];
+
+// Build normal hours
+const hg=document.getElementById('hoursGrid');
+days.forEach((d,i)=>{
+  const open=defaultOpen[i]!==null;
+  const row=document.createElement('div');
+  row.className='hrow';
+  row.innerHTML=`
+    <span class="hday-label${i<5?' bold':''}">${d}</span>
+    <input class="htime-in" type="time" value="${defaultOpen[i]||'10:00'}"${!open?' disabled':''} id="o${i}"/>
+    <input class="htime-in" type="time" value="${defaultClose[i]||'16:00'}"${!open?' disabled':''} id="c${i}"/>
+    <button class="toggle${open?' on':''}" onclick="togDay(${i},this)" title="Åben/lukket"></button>`;
+  hg.appendChild(row);
+});
+
+function togDay(i,btn){
+  btn.classList.toggle('on');
+  const on=btn.classList.contains('on');
+  document.getElementById('o'+i).disabled=!on;
+  document.getElementById('c'+i).disabled=!on;
+}
+
+// Build holiday hours
+const holg=document.getElementById('holGrid');
+holidays.forEach((h,i)=>{
+  const row=document.createElement('div');
+  row.className='hol-row';
+  row.innerHTML=`
+    <div><div class="hol-name">${h.name}</div><div class="hol-date">${h.date}</div></div>
+    <input class="htime-in" type="time" disabled id="ho${i}"/>
+    <input class="htime-in" type="time" disabled id="hc${i}"/>
+    <button class="toggle" onclick="togHol(${i},this)" title="Åben/lukket"></button>`;
+  holg.appendChild(row);
+});
+
+function togHol(i,btn){
+  btn.classList.toggle('on');
+  const on=btn.classList.contains('on');
+  document.getElementById('ho'+i).disabled=!on;
+  document.getElementById('hc'+i).disabled=!on;
+  if(on){document.getElementById('ho'+i).value='10:00';document.getElementById('hc'+i).value='16:00';}
+}
+
+function submit(){
+  const name=document.getElementById('storeName').value.trim();
+  const addr=document.getElementById('storeAddr').value.trim();
+  const email=document.getElementById('ownerEmail').value.trim();
+  if(!name||!addr||!email){alert('Udfyld venligst de påkrævede felter (markeret med *)');return;}
+  document.getElementById('formCard').style.display='none';
+  document.getElementById('successCard').classList.add('show');
+  window.scrollTo({top:document.getElementById('opret').offsetTop-80,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

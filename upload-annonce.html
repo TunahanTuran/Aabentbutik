@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indsend annonce — Åbentbutik.dk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:#0e0e0d;--ink-2:#444;--ink-3:#888;--ink-4:#bbb;
+      --green:#1c7a5e;--green-bg:#eaf5f0;--green-dark:#104a38;
+      --line:#e8e8e4;--line-mid:#d4d4ce;
+      --surface:#fff;--page:#f5f5f1;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.06),0 3px 10px rgba(0,0,0,.04);
+      --shadow-md:0 2px 4px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--page); color:var(--ink); font-size:15px; }
+
+    nav { background:var(--surface); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40; }
+    .nav-inner { max-width:960px; margin:0 auto; padding:0 2rem; height:56px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-family:'Fraunces',serif; font-size:21px; font-weight:300; color:var(--ink); text-decoration:none; }
+    .logo i { font-style:italic; color:var(--green); }
+    .back { font-size:13px; font-weight:500; color:var(--ink-3); text-decoration:none; }
+    .back:hover { color:var(--ink); }
+
+    .hero { background:var(--ink); padding:4rem 2rem 3.5rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 70% at 50% 110%, rgba(28,122,94,0.2), transparent 70%); pointer-events:none; }
+    .hero-kicker { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--green); margin-bottom:1rem; position:relative; }
+    .hero h1 { font-family:'Fraunces',serif; font-size:clamp(30px,4.5vw,48px); font-weight:300; line-height:1.1; letter-spacing:-1px; color:#fff; margin-bottom:0.75rem; position:relative; }
+    .hero h1 i { font-style:italic; color:#6edbb8; }
+    .hero-sub { font-size:15px; color:rgba(255,255,255,0.5); max-width:440px; margin:0 auto; line-height:1.6; position:relative; }
+
+    .wrap { max-width:960px; margin:2rem auto 4rem; padding:0 2rem; display:grid; grid-template-columns:1fr 280px; gap:1.5rem; align-items:start; }
+
+    /* STEPS */
+    .steps { display:flex; gap:0; margin-bottom:1.5rem; background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm); }
+    .step { flex:1; padding:1rem; text-align:center; border-right:1px solid var(--line); transition:background 0.15s; }
+    .step:last-child { border-right:none; }
+    .step.active { background:var(--green-bg); }
+    .step.done { background:#f0faf5; }
+    .step-num { width:24px; height:24px; border-radius:50%; background:var(--line); color:var(--ink-3); font-size:11px; font-weight:700; display:grid; place-items:center; margin:0 auto 6px; }
+    .step.active .step-num { background:var(--green); color:#fff; }
+    .step.done .step-num { background:var(--green); color:#fff; }
+    .step-label { font-size:11px; font-weight:600; color:var(--ink-3); }
+    .step.active .step-label { color:var(--green); }
+    .step.done .step-label { color:var(--green); }
+
+    /* FORM CARD */
+    .form-card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:2rem; box-shadow:var(--shadow-md); }
+    .form-section { display:none; }
+    .form-section.active { display:block; }
+    .section-title { font-family:'Fraunces',serif; font-size:20px; font-weight:300; color:var(--ink); margin-bottom:1.5rem; }
+    .section-title i { font-style:italic; }
+
+    .fgroup { margin-bottom:1.25rem; }
+    .flabel { font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:6px; }
+    .req { color:var(--green); }
+    .finput { width:100%; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--line-mid); border-radius:8px; color:var(--ink); background:var(--surface); transition:border-color 0.15s; }
+    .finput:focus { outline:none; border-color:var(--green); }
+    .fselect { width:100%; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--line-mid); border-radius:8px; color:var(--ink); background:var(--surface); appearance:none; cursor:pointer; }
+    .fselect:focus { outline:none; border-color:var(--green); }
+    .frow { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .fdivider { border:none; border-top:1px solid var(--line); margin:1.5rem 0; }
+
+    /* PAKKE PICKER */
+    .pkg-grid { display:flex; flex-direction:column; gap:8px; }
+    .pkg-item { border:1.5px solid var(--line-mid); border-radius:10px; padding:14px 16px; cursor:pointer; transition:all 0.15s; display:grid; grid-template-columns:20px 1fr auto; gap:12px; align-items:center; }
+    .pkg-item:hover { border-color:var(--green); }
+    .pkg-item.sel { border-color:var(--green); background:var(--green-bg); }
+    .pkg-radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--line-mid); display:grid; place-items:center; transition:all 0.15s; flex-shrink:0; }
+    .pkg-item.sel .pkg-radio { border-color:var(--green); background:var(--green); }
+    .pkg-item.sel .pkg-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+    .pkg-name { font-size:14px; font-weight:600; color:var(--ink); }
+    .pkg-desc { font-size:12px; color:var(--ink-3); margin-top:2px; }
+    .pkg-price { font-size:14px; font-weight:700; color:var(--green); white-space:nowrap; }
+    .pkg-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+    .tag-pop { background:#eaf5f0; color:#0f5c37; }
+    .tag-excl { background:#0e0e0d; color:#fff; }
+
+    /* UPLOAD */
+    .format-specs { background:var(--page); border:1px solid var(--line); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem; }
+    .spec-title { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px; }
+    .spec-list { display:flex; flex-direction:column; gap:5px; }
+    .spec-row { display:flex; justify-content:space-between; font-size:13px; }
+    .spec-key { color:var(--ink-3); }
+    .spec-val { color:var(--ink); font-weight:500; }
+
+    .upload-zone { border:2px dashed var(--line-mid); border-radius:10px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; }
+    .upload-zone:hover, .upload-zone.drag { border-color:var(--green); background:var(--green-bg); }
+    .upload-zone.has-file { border-color:var(--green); border-style:solid; background:var(--green-bg); }
+    .upload-icon { font-size:32px; margin-bottom:10px; }
+    .upload-title { font-size:15px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+    .upload-sub { font-size:13px; color:var(--ink-3); }
+    .upload-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    .file-preview { display:none; align-items:center; gap:12px; }
+    .file-preview.show { display:flex; }
+    .file-thumb { width:60px; height:40px; border-radius:6px; background:var(--line); overflow:hidden; flex-shrink:0; }
+    .file-thumb img { width:100%; height:100%; object-fit:cover; }
+    .file-name { font-size:13px; font-weight:600; color:var(--ink); }
+    .file-size { font-size:12px; color:var(--ink-3); margin-top:2px; }
+    .file-remove { font-size:12px; color:var(--ink-3); background:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:underline; margin-top:4px; display:block; padding:0; }
+
+    /* LINK FELTER */
+    .link-note { font-size:12px; color:var(--ink-3); margin-top:6px; line-height:1.5; }
+
+    /* PERIODE */
+    .periode-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .helligdag-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .htag { font-size:12px; font-weight:500; padding:5px 12px; border-radius:20px; border:1px solid var(--line-mid); background:var(--surface); color:var(--ink-2); cursor:pointer; transition:all 0.12s; font-family:'DM Sans',sans-serif; }
+    .htag.on { background:var(--green); border-color:var(--green); color:#fff; }
+    .htag-label { font-size:12px; color:var(--ink-3); margin-bottom:6px; }
+
+    /* BUTTONS */
+    .btn-row { display:flex; gap:10px; margin-top:1.5rem; }
+    .btn-primary { flex:1; padding:13px; background:var(--green); color:#fff; font-size:14px; font-weight:600; border:none; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.15s; }
+    .btn-primary:hover { background:var(--green-dark); }
+    .btn-secondary { padding:13px 20px; background:var(--surface); color:var(--ink-2); font-size:14px; font-weight:500; border:1.5px solid var(--line-mid); border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.15s; }
+    .btn-secondary:hover { border-color:var(--ink-3); color:var(--ink); }
+
+    /* SUCCESS */
+    .success-card { display:none; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:3rem 2rem; text-align:center; box-shadow:var(--shadow-md); }
+    .success-card.show { display:block; }
+    .success-icon { font-size:52px; margin-bottom:1rem; }
+    .success-title { font-family:'Fraunces',serif; font-size:26px; font-weight:300; color:var(--ink); margin-bottom:8px; }
+    .success-title i { font-style:italic; color:var(--green); }
+    .success-sub { font-size:15px; color:var(--ink-2); max-width:420px; margin:0 auto 1.5rem; line-height:1.6; }
+    .success-box { background:var(--page); border:1px solid var(--line); border-radius:10px; padding:1rem 1.25rem; text-align:left; max-width:420px; margin:0 auto; }
+    .success-row { display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid var(--line); }
+    .success-row:last-child { border:none; }
+    .success-key { color:var(--ink-3); }
+    .success-val { font-weight:600; color:var(--ink); }
+
+    /* SIDEBAR */
+    .sidebar { display:flex; flex-direction:column; gap:1rem; position:sticky; top:72px; }
+    .sc { background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm); }
+    .sc-head { padding:10px 16px; background:var(--page); border-bottom:1px solid var(--line); font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); }
+    .sc-body { padding:16px; }
+    .info-list { display:flex; flex-direction:column; gap:9px; }
+    .info-item { font-size:13px; color:var(--ink-2); display:flex; gap:8px; line-height:1.5; }
+    .info-item::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+    .contact-text { font-size:13px; color:var(--ink-2); line-height:1.6; }
+    .contact-link { color:var(--green); font-weight:600; text-decoration:none; }
+
+    /* PREVIEW LIVE */
+    .preview-live { background:var(--page); border:1px solid var(--line); border-radius:8px; padding:10px; min-height:70px; display:flex; align-items:center; justify-content:center; margin-top:10px; }
+    .preview-placeholder { font-size:12px; color:var(--ink-4); text-align:center; }
+
+    /* AD PREVIEW MINI */
+    .mini-lb { background:#0e0e0d; border-radius:6px; display:flex; align-items:center; gap:0; height:56px; width:100%; overflow:hidden; }
+    .mlb-l { width:60px; background:rgba(255,255,255,0.06); height:100%; display:grid; place-items:center; flex-shrink:0; }
+    .mlb-logo { width:32px; height:32px; border-radius:6px; display:grid; place-items:center; color:#fff; font-size:13px; font-weight:800; }
+    .mlb-c { flex:1; padding:0 10px; }
+    .mlb-title { font-size:11px; font-weight:700; color:#fff; }
+    .mlb-sub { font-size:10px; color:rgba(255,255,255,0.5); margin-top:2px; }
+    .mlb-r { width:64px; background:rgba(255,255,255,0.05); height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+    .mlb-cta { font-size:9px; font-weight:700; padding:3px 8px; color:#fff; border-radius:3px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+    footer { background:var(--surface); border-top:1px solid var(--line); padding:2rem; text-align:center; margin-top:3rem; }
+    .foot-brand { font-family:'Fraunces',serif; font-size:18px; font-weight:300; color:var(--ink); }
+    .foot-brand i { font-style:italic; color:var(--green); }
+    .foot-sub { font-size:13px; color:var(--ink-3); margin-top:4px; }
+
+    @media(max-width:680px) { .wrap{grid-template-columns:1fr} .sidebar{display:none} .frow,.periode-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">åbent<i>butik</i></a>
+    <a href="annoncer.html" class="back">← Annoncér på siden</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-kicker">Self-serve annonceportal</div>
+  <h1>Upload din annonce — <i>live inden 24 timer</i></h1>
+  <p class="hero-sub">Du uploader dit eget banner, vi godkender det og sætter det live. Så simpelt er det.</p>
+</section>
+
+<div class="wrap">
+  <div>
+    <!-- STEPS -->
+    <div class="steps" id="stepsBar">
+      <div class="step active" id="s1"><div class="step-num">1</div><div class="step-label">Virksomhed</div></div>
+      <div class="step" id="s2"><div class="step-num">2</div><div class="step-label">Pakke</div></div>
+      <div class="step" id="s3"><div class="step-num">3</div><div class="step-label">Upload</div></div>
+      <div class="step" id="s4"><div class="step-num">4</div><div class="step-label">Periode</div></div>
+    </div>
+
+    <div class="form-card" id="formCard">
+
+      <!-- STEP 1 — Virksomhed -->
+      <div class="form-section active" id="sec1">
+        <div class="section-title">Fortæl os om din <i>virksomhed</i></div>
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">Virksomhedsnavn <span class="req">*</span></label>
+            <input class="finput" type="text" id="bizName" placeholder="fx Netto, Rema 1000..." oninput="updateSidebar()"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">CVR-nummer</label>
+            <input class="finput" type="text" placeholder="12345678"/>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">Kontaktperson <span class="req">*</span></label>
+            <input class="finput" type="text" id="contactName" placeholder="Dit fulde navn"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">E-mail <span class="req">*</span></label>
+            <input class="finput" type="email" id="contactEmail" placeholder="dig@virksomhed.dk"/>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Telefon</label>
+          <input class="finput" type="tel" placeholder="12 34 56 78"/>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Branche</label>
+          <select class="fselect">
+            <option value="">Vælg branche</option>
+            <option>Dagligvarer</option>
+            <option>Elektronik</option>
+            <option>Tøj & mode</option>
+            <option>Apotek & pleje</option>
+            <option>Café & restaurant</option>
+            <option>Sport & fritid</option>
+            <option>Bolig & indretning</option>
+            <option>Online handel</option>
+            <option>Andet</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="goTo(2)">Næste — vælg pakke →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — Pakke -->
+      <div class="form-section" id="sec2">
+        <div class="section-title">Vælg din <i>annoncepakke</i></div>
+        <div class="pkg-grid">
+          <div class="pkg-item" onclick="selectPkg(this,'Synlig','750 kr/md')" id="pkg1">
+            <div class="pkg-radio"></div>
+            <div><div class="pkg-name">Synlig — 750 kr/md</div><div class="pkg-desc">Indlejret annonce i butikslisten</div></div>
+            <div></div>
+          </div>
+          <div class="pkg-item sel" onclick="selectPkg(this,'Fremhævet','1.500 kr/md')" id="pkg2">
+            <div class="pkg-radio"></div>
+            <div><div class="pkg-name">Fremhævet — 1.500 kr/md</div><div class="pkg-desc">Topbanner + sidekolonne + rapport</div></div>
+            <div><span class="pkg-tag tag-pop">Populær</span></div>
+          </div>
+          <div class="pkg-item" onclick="selectPkg(this,'Dominerende','4.000 kr/md')" id="pkg3">
+            <div class="pkg-radio"></div>
+            <div><div class="pkg-name">Dominerende — 4.000 kr/md</div><div class="pkg-desc">Eksklusiv + scroll billboard + nyhedsbrev</div></div>
+            <div><span class="pkg-tag tag-excl">Eksklusiv</span></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goTo(1)">← Tilbage</button>
+          <button class="btn-primary" onclick="goTo(3)">Næste — upload banner →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — Upload -->
+      <div class="form-section" id="sec3">
+        <div class="section-title">Upload dit <i>banner</i></div>
+
+        <div class="format-specs" id="formatSpecs">
+          <div class="spec-title">Krav til dit banner (Fremhævet — Topbanner)</div>
+          <div class="spec-list">
+            <div class="spec-row"><span class="spec-key">Størrelse</span><span class="spec-val">970 × 90 px</span></div>
+            <div class="spec-row"><span class="spec-key">Format</span><span class="spec-val">JPG, PNG eller GIF</span></div>
+            <div class="spec-row"><span class="spec-key">Maks. filstørrelse</span><span class="spec-val">500 KB</span></div>
+            <div class="spec-row"><span class="spec-key">Animeret GIF</span><span class="spec-val">Tilladt — maks. 15 sek loop</span></div>
+          </div>
+        </div>
+
+        <div class="upload-zone" id="dropZone">
+          <input type="file" class="upload-input" id="fileInput" accept="image/*" onchange="handleFile(this)"/>
+          <div id="uploadDefault">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-title">Træk og slip dit banner her</div>
+            <div class="upload-sub">eller klik for at vælge fil</div>
+          </div>
+          <div class="file-preview" id="filePreview">
+            <div class="file-thumb"><img id="thumbImg" src="" alt=""/></div>
+            <div>
+              <div class="file-name" id="fileName"></div>
+              <div class="file-size" id="fileSize"></div>
+              <button class="file-remove" onclick="removeFile(event)">Fjern fil og upload nyt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="fdivider"></div>
+        <div class="fgroup">
+          <label class="flabel">Kliklink <span class="req">*</span></label>
+          <input class="finput" type="url" id="adLink" placeholder="https://din-hjemmeside.dk/tilbud"/>
+          <div class="link-note">Brugeren sendes hertil når de klikker på din annonce. Sørg for linket er aktivt og relevant.</div>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Titel på annonce (til intern brug)</label>
+          <input class="finput" type="text" id="adTitle" placeholder="fx Netto påske 2026" oninput="updateSidebar()"/>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goTo(2)">← Tilbage</button>
+          <button class="btn-primary" onclick="goTo(4)">Næste — vælg periode →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — Periode -->
+      <div class="form-section" id="sec4">
+        <div class="section-title">Hvornår skal din annonce <i>køre?</i></div>
+        <div class="periode-grid">
+          <div class="fgroup">
+            <label class="flabel">Startdato <span class="req">*</span></label>
+            <input class="finput" type="date" id="startDate"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Slutdato <span class="req">*</span></label>
+            <input class="finput" type="date" id="endDate"/>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <div class="htag-label">Vil du fremhæve annoncen ekstra på bestemte helligdage?</div>
+          <div class="helligdag-tags">
+            <div class="htag" onclick="this.classList.toggle('on')">Påske</div>
+            <div class="htag" onclick="this.classList.toggle('on')">Store bededag</div>
+            <div class="htag" onclick="this.classList.toggle('on')">Pinse</div>
+            <div class="htag" onclick="this.classList.toggle('on')">Kristi himmelfart</div>
+            <div class="htag" onclick="this.classList.toggle('on')">Jul</div>
+            <div class="htag" onclick="this.classList.toggle('on')">Nytår</div>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Særlige ønsker</label>
+          <textarea style="width:100%;padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--line-mid);border-radius:8px;color:var(--ink);background:var(--surface);resize:vertical;min-height:80px" placeholder="fx 'Må kun vises på hverdage' eller 'Stop annoncen hvis vi er udsolgt'"></textarea>
+        </div>
+
+        <div style="background:var(--green-bg);border:1px solid rgba(28,122,94,0.2);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
+          <div style="font-size:14px;font-weight:600;color:#0a3d2b;margin-bottom:4px;">Hvad sker der nu?</div>
+          <div style="font-size:13px;color:#1c5c42;line-height:1.6;">Vi gennemgår din annonce inden for <strong>24 timer</strong>. Du modtager en bekræftelses-e-mail når den er godkendt og live på siden.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goTo(3)">← Tilbage</button>
+          <button class="btn-primary" onclick="submitAd()">Send annonce til godkendelse →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-card" id="successCard">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Annonce <i>modtaget!</i></div>
+      <div class="success-sub">Vi gennemgår din annonce og sender en bekræftelse til din e-mail. Den er live inden for 24 timer.</div>
+      <div class="success-box" id="successSummary"></div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sc">
+      <div class="sc-head">Din bestilling</div>
+      <div class="sc-body">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:8px;border-bottom:1px solid var(--line)">
+            <span style="color:var(--ink-3)">Virksomhed</span>
+            <span style="font-weight:600;color:var(--ink)" id="sb-biz">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:8px;border-bottom:1px solid var(--line)">
+            <span style="color:var(--ink-3)">Pakke</span>
+            <span style="font-weight:600;color:var(--ink)" id="sb-pkg">Fremhævet</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:8px;border-bottom:1px solid var(--line)">
+            <span style="color:var(--ink-3)">Pris</span>
+            <span style="font-weight:700;color:var(--green)" id="sb-price">1.500 kr/md</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px">
+            <span style="color:var(--ink-3)">Trin</span>
+            <span style="font-weight:600;color:var(--ink)" id="sb-step">1 / 4</span>
+          </div>
+        </div>
+        <div class="preview-live" id="sidePreview">
+          <div class="preview-placeholder">Preview vises når du uploader dit banner</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head">Inkluderet i alle pakker</div>
+      <div class="sc-body">
+        <div class="info-list">
+          <div class="info-item">Godkendelse inden 24 timer</div>
+          <div class="info-item">Ingen binding — opsig når du vil</div>
+          <div class="info-item">Annoncen markeres tydeligt som "Annonce"</div>
+          <div class="info-item">Månedlig faktura pr. e-mail</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head">Spørgsmål?</div>
+      <div class="sc-body">
+        <div class="contact-text">Skriv til <a href="mailto:kontakt@åbentbutik.dk" class="contact-link">kontakt@åbentbutik.dk</a> — vi svarer inden for 1 arbejdsdag.</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="foot-brand">åbent<i>butik</i></div>
+  <div class="foot-sub">© 2026 Åbentbutik.dk — Bygget i Danmark 🇩🇰</div>
+</footer>
+
+<script>
+let curStep = 1;
+let selPkg = 'Fremhævet';
+let selPrice = '1.500 kr/md';
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('startDate').value = today;
+const end = new Date(); end.setMonth(end.getMonth()+1);
+document.getElementById('endDate').value = end.toISOString().split('T')[0];
+
+function goTo(step) {
+  if (step === 2) {
+    const biz = document.getElementById('bizName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    if (!biz || !email) { alert('Udfyld venligst virksomhedsnavn og e-mail.'); return; }
+  }
+  document.getElementById('sec'+curStep).classList.remove('active');
+  document.getElementById('s'+curStep).classList.remove('active');
+  document.getElementById('s'+curStep).classList.add('done');
+  curStep = step;
+  document.getElementById('sec'+step).classList.add('active');
+  document.querySelectorAll('.step').forEach((s,i) => {
+    if (i+1 === step) { s.classList.add('active'); s.classList.remove('done'); }
+    else if (i+1 < step) { s.classList.remove('active'); s.classList.add('done'); }
+    else { s.classList.remove('active','done'); }
+  });
+  document.getElementById('sb-step').textContent = step + ' / 4';
+  updateSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectPkg(el, name, price) {
+  document.querySelectorAll('.pkg-item').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  selPkg = name; selPrice = price;
+  document.getElementById('sb-pkg').textContent = name;
+  document.getElementById('sb-price').textContent = price;
+  const specs = { 'Synlig': ['728 × 90 px','JPG, PNG eller GIF','300 KB','Ikke tilladt'],
+    'Fremhævet': ['970 × 90 px','JPG, PNG eller GIF','500 KB','Tilladt — maks. 15 sek'],
+    'Dominerende': ['970 × 250 px','JPG, PNG, GIF eller MP4','1 MB','Tilladt — maks. 30 sek'] };
+  const s = specs[name];
+  document.getElementById('formatSpecs').innerHTML = `<div class="spec-title">Krav til dit banner (${name})</div><div class="spec-list"><div class="spec-row"><span class="spec-key">Størrelse</span><span class="spec-val">${s[0]}</span></div><div class="spec-row"><span class="spec-key">Format</span><span class="spec-val">${s[1]}</span></div><div class="spec-row"><span class="spec-key">Maks. filstørrelse</span><span class="spec-val">${s[2]}</span></div><div class="spec-row"><span class="spec-key">Animeret GIF</span><span class="spec-val">${s[3]}</span></div></div>`;
+}
+
+function handleFile(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('thumbImg').src = e.target.result;
+    document.getElementById('uploadDefault').style.display = 'none';
+    document.getElementById('filePreview').classList.add('show');
+    document.getElementById('dropZone').classList.add('has-file');
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = (file.size/1024).toFixed(0) + ' KB';
+    document.getElementById('sidePreview').innerHTML = `<img src="${e.target.result}" style="width:100%;border-radius:6px;display:block" alt="Banner preview"/>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeFile(e) {
+  e.stopPropagation();
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uploadDefault').style.display = 'block';
+  document.getElementById('filePreview').classList.remove('show');
+  document.getElementById('dropZone').classList.remove('has-file');
+  document.getElementById('sidePreview').innerHTML = '<div class="preview-placeholder">Preview vises når du uploader dit banner</div>';
+}
+
+function updateSidebar() {
+  const biz = document.getElementById('bizName').value;
+  if (biz) document.getElementById('sb-biz').textContent = biz;
+}
+
+function submitAd() {
+  const start = document.getElementById('startDate').value;
+  const end = document.getElementById('endDate').value;
+  if (!start || !end) { alert('Vælg venligst start- og slutdato.'); return; }
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('stepsBar').style.display = 'none';
+  document.getElementById('successCard').classList.add('show');
+  const biz = document.getElementById('bizName').value || '—';
+  const email = document.getElementById('contactEmail').value || '—';
+  document.getElementById('successSummary').innerHTML = `
+    <div class="success-row"><span class="success-key">Virksomhed</span><span class="success-val">${biz}</span></div>
+    <div class="success-row"><span class="success-key">Pakke</span><span class="success-val">${selPkg}</span></div>
+    <div class="success-row"><span class="success-key">Pris</span><span class="success-val">${selPrice}</span></div>
+    <div class="success-row"><span class="success-key">Periode</span><span class="success-val">${start} → ${end}</span></div>
+    <div class="success-row"><span class="success-key">Bekræftelse sendes til</span><span class="success-val">${email}</span></div>`;
+}
+
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); if (e.dataTransfer.files[0]) { const fi = document.getElementById('fileInput'); const dt = new DataTransfer(); dt.items.add(e.dataTransfer.files[0]); fi.files = dt.files; handleFile(fi); } });
+</script>
+</body>
+</html>

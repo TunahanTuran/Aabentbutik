@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Åbentbutik.dk — Er din butik åben i dag?</title>
+  <meta name="description" content="Tjek om din lokale butik har åbent — også på helligdage, påske, jul og nytår."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0e0e0d;
+      --ink-2: #444;
+      --ink-3: #888;
+      --ink-4: #bbb;
+      --green: #1c7a5e;
+      --green-bg: #eaf5f0;
+      --green-dark: #104a38;
+      --amber: #b07010;
+      --amber-bg: #fdf4e0;
+      --red: #a82020;
+      --red-bg: #fce8e8;
+      --line: #e8e8e4;
+      --line-mid: #d4d4ce;
+      --surface: #fff;
+      --page: #f5f5f1;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.06), 0 3px 10px rgba(0,0,0,0.04);
+      --shadow-md: 0 2px 4px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.06);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--page); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+    /* NAV */
+    nav { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 40; }
+    .nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 2rem; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 300; color: var(--ink); text-decoration: none; letter-spacing: -0.2px; }
+    .logo i { font-style: italic; color: var(--green); }
+    .nav-right { display: flex; align-items: center; gap: 1.25rem; }
+    .nav-a { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; }
+    .nav-a:hover { color: var(--ink); }
+    .nav-btn { font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: 6px; background: var(--ink); color: #fff; text-decoration: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+    .nav-btn:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero { background: var(--surface); border-bottom: 1px solid var(--line); padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, #eaf5f0 0%, transparent 70%); pointer-events: none; }
+    .hero-kicker { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(38px, 6vw, 64px); font-weight: 300; line-height: 1.1; letter-spacing: -1px; color: var(--ink); margin-bottom: 1.25rem; position: relative; }
+    .hero h1 i { font-style: italic; color: var(--green); }
+    .hero-sub { font-size: 17px; color: var(--ink-2); max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.65; font-weight: 400; }
+    .search-outer { max-width: 540px; margin: 0 auto; position: relative; }
+    .search-outer svg { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+    #si { width: 100%; padding: 16px 18px 16px 50px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1.5px solid var(--line-mid); border-radius: 12px; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-md); transition: border-color 0.15s; }
+    #si:focus { outline: none; border-color: var(--green); }
+    #si::placeholder { color: var(--ink-4); }
+    .hero-tags { display: flex; gap: 8px; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+    .hero-tag { font-size: 12px; color: var(--ink-3); background: var(--page); border: 1px solid var(--line); padding: 4px 12px; border-radius: 20px; cursor: pointer; transition: all 0.12s; }
+    .hero-tag:hover { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+
+    /* ALERT */
+    .alert-zone { max-width: 1040px; margin: 1.5rem auto 0; padding: 0 2rem; }
+    .alert { border-left: 3px solid #c8960a; padding: 0.875rem 1.125rem; background: var(--amber-bg); border-radius: 0 8px 8px 0; display: flex; gap: 12px; align-items: flex-start; }
+    .alert-title { font-size: 14px; font-weight: 600; color: #4a3000; }
+    .alert-sub { font-size: 13px; color: #6a4800; margin-top: 2px; }
+
+    /* LAYOUT */
+    .wrap { max-width: 1040px; margin: 1.5rem auto 3rem; padding: 0 2rem; display: grid; grid-template-columns: 1fr 240px; gap: 1.5rem; align-items: start; }
+
+    /* FILTERS */
+    .filters { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 500; padding: 6px 15px; border-radius: 6px; border: 1px solid var(--line-mid); background: var(--surface); color: var(--ink-2); cursor: pointer; transition: all 0.12s; font-family: 'DM Sans', sans-serif; }
+    .chip:hover { border-color: var(--green); color: var(--green); }
+    .chip.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+    /* CARD SHELL */
+    .card-shell { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .card-head { display: grid; grid-template-columns: 1fr 96px; padding: 10px 18px; background: #fafaf8; border-bottom: 1px solid var(--line); }
+    .card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); }
+    .card-label:last-child { text-align: right; }
+
+    /* STORE ROW */
+    .srow { border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.1s; }
+    .srow:last-child { border: none; }
+    .srow:hover { background: #fafaf8; }
+    .srow-main { display: grid; grid-template-columns: 44px 1fr 96px; gap: 12px; padding: 14px 18px; align-items: center; }
+    .srow-icon { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+    .srow-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .srow-addr { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+    .srow-time { font-size: 13px; color: var(--ink-2); margin-top: 4px; font-weight: 500; }
+    .srow-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+    .bo { background: var(--green-bg); color: var(--green-dark); }
+    .bl { background: var(--amber-bg); color: var(--amber); }
+    .bc { background: var(--red-bg); color: var(--red); }
+    .chev { font-size: 11px; color: var(--ink-4); transition: transform 0.2s; }
+    .chev.up { transform: rotate(180deg); }
+
+    /* DRAWER */
+    .drawer { overflow: hidden; max-height: 0; transition: max-height 0.32s ease, opacity 0.22s; opacity: 0; }
+    .drawer.open { max-height: 700px; opacity: 1; }
+    .drawer-in { padding: 1.25rem 1.25rem 1.25rem 74px; background: #f9f9f7; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .dlabel { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+    .daddr { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .dcity { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+    .dmap { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid rgba(28,122,94,0.3); padding-bottom: 1px; }
+    .dmap:hover { color: var(--green-dark); }
+    .htable { width: 100%; border-collapse: collapse; }
+    .htable tr { border-bottom: 1px solid var(--line); }
+    .htable tr:last-child { border: none; }
+    .htable tr.td-today .hday { font-weight: 600; color: var(--ink); }
+    .htable tr.td-today .hday::after { content: ' ·'; color: var(--green); }
+    .htable td { padding: 5px 0; font-size: 13px; }
+    .hday { color: var(--ink-2); }
+    .htime { text-align: right; font-weight: 500; color: var(--ink); }
+    .htime.off { color: var(--red); font-weight: 400; font-style: italic; }
+    .htime.lim { color: var(--amber); }
+    .dfooter { grid-column: 1/-1; padding-top: 0.875rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+    .rptbtn { font-size: 12px; color: var(--ink-3); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
+    .rptbtn:hover { color: var(--ink-2); }
+    .sharebtn { font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-bg); border: none; border-radius: 6px; padding: 5px 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+    /* NATIVE AD */
+    .native { border-bottom: 1px solid var(--line); padding: 13px 18px 13px 74px; display: flex; gap: 12px; align-items: center; background: #fafaf6; position: relative; }
+    .native-icon { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+    .native-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .native-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+    .native-tag { position: absolute; top: 7px; right: 12px; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4); }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+    .sc { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .sc-head { padding: 10px 16px; background: #fafaf8; border-bottom: 1px solid var(--line); font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); }
+    .sc-body { padding: 16px; }
+
+    .stats { display: flex; flex-direction: column; gap: 10px; }
+    .stat-r { display: flex; align-items: center; gap: 8px; }
+    .sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .sname { font-size: 13px; color: var(--ink-2); flex: 1; }
+    .snum { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; font-family: 'Fraunces', serif; font-style: italic; }
+    .gn { color: var(--green); } .dg { background: var(--green); }
+    .an { color: var(--amber); } .da { background: #e8a020; }
+    .rn { color: var(--red); } .dr { background: #dc2626; }
+
+    .hols { display: flex; flex-direction: column; gap: 9px; }
+    .hol { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+    .hol:last-child { border: none; }
+    .hol-n { color: var(--ink-2); }
+    .hol-d { font-weight: 600; color: var(--ink); font-size: 12px; }
+    .hol.now .hol-n { color: var(--green); font-weight: 600; }
+    .hol.now .hol-d { color: var(--green); }
+
+    .ad-box { position: relative; }
+    .ad-lbl { position: absolute; top: 0; right: 0; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4); }
+    .ad-img { width: 100%; height: 76px; border-radius: 8px; margin-bottom: 10px; display: grid; place-items: center; font-size: 28px; }
+    .ad-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .ad-sub { font-size: 12px; color: var(--ink-2); margin-top: 3px; line-height: 1.4; }
+    .ad-cta { width: 100%; margin-top: 10px; padding: 9px; font-size: 12px; font-weight: 600; border: none; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+    .ad-cta:hover { opacity: 0.85; }
+
+    /* CTA CARD */
+    .cta-card { background: var(--ink); border-radius: 14px; padding: 1.25rem; color: #fff; }
+    .cta-t { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 300; line-height: 1.3; margin-bottom: 6px; }
+    .cta-t i { font-style: italic; }
+    .cta-sub { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.5; margin-bottom: 14px; }
+    .cta-btn { display: block; width: 100%; padding: 10px; background: var(--green); color: #fff; font-size: 13px; font-weight: 600; border: none; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; text-decoration: none; transition: opacity 0.15s; }
+    .cta-btn:hover { opacity: 0.9; }
+
+    /* FOOTER */
+    footer { background: var(--surface); border-top: 1px solid var(--line); padding: 2.5rem 2rem; margin-top: 2rem; }
+    .foot-in { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+    .foot-brand { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 300; color: var(--ink); margin-bottom: 6px; }
+    .foot-brand i { font-style: italic; color: var(--green); }
+    .foot-sub { font-size: 13px; color: var(--ink-3); max-width: 220px; line-height: 1.5; }
+    .foot-links { display: flex; flex-direction: column; gap: 8px; }
+    .foot-link { font-size: 13px; color: var(--ink-3); text-decoration: none; }
+    .foot-link:hover { color: var(--ink); }
+    .foot-bottom { max-width: 1040px; margin: 1.5rem auto 0; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-4); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+    /* POPUP */
+    .pop-over { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: grid; place-items: center; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; padding: 1rem; }
+    .pop-over.show { opacity: 1; pointer-events: all; }
+    .popup { background: var(--surface); border-radius: 18px; padding: 2.25rem; max-width: 380px; width: 100%; position: relative; box-shadow: 0 24px 64px rgba(0,0,0,0.15); }
+    .pop-x { position: absolute; top: 16px; right: 18px; font-size: 16px; cursor: pointer; color: var(--ink-3); background: none; border: none; line-height: 1; font-family: inherit; }
+    .pop-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+    .pop-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 300; color: var(--ink); line-height: 1.2; margin-bottom: 8px; }
+    .pop-title i { font-style: italic; }
+    .pop-sub { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin-bottom: 1.25rem; }
+    .pop-input { width: 100%; padding: 12px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; border: 1.5px solid var(--line-mid); border-radius: 8px; margin-bottom: 10px; color: var(--ink); transition: border-color 0.15s; }
+    .pop-input:focus { outline: none; border-color: var(--green); }
+    .pop-cta { width: 100%; padding: 13px; background: var(--green); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+    .pop-cta:hover { background: var(--green-dark); }
+    .pop-skip { width: 100%; margin-top: 8px; padding: 8px; background: none; border: none; font-size: 13px; color: var(--ink-3); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+    @media(max-width:700px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.nav-a{display:none}.drawer-in{grid-template-columns:1fr}.srow-main{grid-template-columns:36px 1fr 80px}.drawer-in{padding-left:1.25rem}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">åbent<i>butik</i></a>
+    <div class="nav-right">
+      <a href="#" class="nav-a">Helligdage</a>
+      <a href="#" class="nav-a">Byer</a>
+      <a href="virksomhed.html" class="nav-btn">Er du en butik?</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-kicker">Åbningstider i Danmark</div>
+  <h1>Er din butik<br><i>åben i dag?</i></h1>
+  <p class="hero-sub">Tjek åbningstider for lokale butikker — også på påske, jul, nytår og alle andre helligdage.</p>
+  <div class="search-outer">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 12L16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <input type="text" id="si" placeholder="Søg efter butik, adresse eller by..." oninput="render()" autocomplete="off"/>
+  </div>
+  <div class="hero-tags">
+    <span class="hero-tag" onclick="qs('netto')">Netto</span>
+    <span class="hero-tag" onclick="qs('føtex')">Føtex</span>
+    <span class="hero-tag" onclick="qs('matas')">Matas</span>
+    <span class="hero-tag" onclick="qs('elgiganten')">Elgiganten</span>
+    <span class="hero-tag" onclick="qs('h&m')">H&M</span>
+  </div>
+</section>
+
+<div class="alert-zone">
+  <div class="alert">
+    <div>
+      <div class="alert-title">☀️ Helligdag — 2. påskedag</div>
+      <div class="alert-sub">Mange butikker holder lukket eller har reducerede åbningstider i dag.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div>
+    <div class="filters">
+      <div class="chip active" onclick="setF(this,'alle')">Alle</div>
+      <div class="chip" onclick="setF(this,'dagligvarer')">Dagligvarer</div>
+      <div class="chip" onclick="setF(this,'apotek')">Apotek & pleje</div>
+      <div class="chip" onclick="setF(this,'elektronik')">Elektronik</div>
+      <div class="chip" onclick="setF(this,'tøj')">Tøj & mode</div>
+    </div>
+    <div class="card-shell">
+      <div class="card-head">
+        <div class="card-label">Butik</div>
+        <div class="card-label">Status</div>
+      </div>
+      <div id="list"></div>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sc">
+      <div class="sc-head">Oversigt i dag</div>
+      <div class="sc-body">
+        <div class="stats">
+          <div class="stat-r"><div class="sdot dg"></div><span class="sname">Åbne</span><span class="snum gn">14</span></div>
+          <div class="stat-r"><div class="sdot da"></div><span class="sname">Begrænset</span><span class="snum an">5</span></div>
+          <div class="stat-r"><div class="sdot dr"></div><span class="sname">Lukkede</span><span class="snum rn">8</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head">Kommende helligdage</div>
+      <div class="sc-body">
+        <div class="hols">
+          <div class="hol now"><span class="hol-n">2. påskedag</span><span class="hol-d">I dag</span></div>
+          <div class="hol"><span class="hol-n">Store bededag</span><span class="hol-d">9. maj</span></div>
+          <div class="hol"><span class="hol-n">Kristi himmelfart</span><span class="hol-d">29. maj</span></div>
+          <div class="hol"><span class="hol-n">Pinse</span><span class="hol-d">8–9. jun</span></div>
+          <div class="hol"><span class="hol-n">Juleaften</span><span class="hol-d">24. dec</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-card">
+      <div class="cta-t">Har du en butik? <i>Bliv synlig</i></div>
+      <div class="cta-sub">Opret din butik gratis og hold dine kunder opdateret om åbningstider.</div>
+      <a href="virksomhed.html" class="cta-btn">Tilmeld din butik gratis →</a>
+    </div>
+
+    <div class="sc">
+      <div class="sc-body ad-box">
+        <span class="ad-lbl">Annonce</span>
+        <div class="ad-img" style="background:var(--green-bg)">🛒</div>
+        <div class="ad-title">Rema 1000 påsketilbud</div>
+        <div class="ad-sub">Spar op til 40% på udvalgte varer hele påsken</div>
+        <button class="ad-cta" style="background:var(--green);color:#fff">Se tilbud →</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <div>
+      <div class="foot-brand">åbent<i>butik</i></div>
+      <div class="foot-sub">Åbningstider for butikker i Danmark — opdateret dagligt af butikkerne selv.</div>
+    </div>
+    <div class="foot-links">
+      <a href="#" class="foot-link">Om åbentbutik</a>
+      <a href="virksomhed.html" class="foot-link">Tilmeld din butik</a>
+      <a href="#" class="foot-link">Alle helligdage</a>
+      <a href="#" class="foot-link">Kontakt</a>
+    </div>
+    <div class="foot-links">
+      <a href="#" class="foot-link">Privatlivspolitik</a>
+      <a href="#" class="foot-link">Cookiepolitik</a>
+      <a href="#" class="foot-link">Annoncér på siden</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Åbentbutik.dk</span>
+    <span>Bygget i Danmark 🇩🇰</span>
+  </div>
+</footer>
+
+<div class="pop-over" id="pop">
+  <div class="popup">
+    <button class="pop-x" onclick="document.getElementById('pop').classList.remove('show')">✕</button>
+    <div class="pop-tag">Gratis service</div>
+    <div class="pop-title">Aldrig i tvivl om butikken er <i>åben</i></div>
+    <div class="pop-sub">Tilmeld dig og få besked dagen før helligdage om din yndlingsbutiks åbningstider.</div>
+    <input class="pop-input" type="email" placeholder="Din e-mail..."/>
+    <button class="pop-cta">Tilmeld gratis notifikationer</button>
+    <button class="pop-skip" onclick="document.getElementById('pop').classList.remove('show')">Nej tak, jeg tjekker selv</button>
+  </div>
+</div>
+
+<script>
+const S=[
+  {name:'Netto',type:'Dagligvarer',cat:'dagligvarer',st:'open',today:'10:00 – 18:00',icon:'🛒',bg:'#eaf5f0',addr:'Nørrebrogade 44',city:'2200 København N',mq:'Netto+Nørrebrogade+44',week:[{d:'Mandag',t:'08:00–22:00',s:'n'},{d:'Tirsdag',t:'08:00–22:00',s:'n'},{d:'Onsdag',t:'08:00–22:00',s:'n'},{d:'Torsdag',t:'08:00–22:00',s:'n'},{d:'Fredag',t:'08:00–22:00',s:'n'},{d:'Lørdag',t:'08:00–20:00',s:'n'},{d:'Søndag — påske',t:'10:00–18:00',s:'l',td:true}]},
+  {name:'Føtex',type:'Dagligvarer',cat:'dagligvarer',st:'limited',today:'10:00 – 16:00',icon:'🛍️',bg:'#eaf5f0',addr:'Frederiksberg Allé 12',city:'1820 Frederiksberg',mq:'Føtex+Frederiksberg',week:[{d:'Mandag',t:'07:00–21:00',s:'n'},{d:'Tirsdag',t:'07:00–21:00',s:'n'},{d:'Onsdag',t:'07:00–21:00',s:'n'},{d:'Torsdag',t:'07:00–21:00',s:'n'},{d:'Fredag',t:'07:00–21:00',s:'n'},{d:'Lørdag',t:'07:00–18:00',s:'n'},{d:'Søndag — påske',t:'10:00–16:00',s:'l',td:true}]},
+  {name:'Matas',type:'Apotek & pleje',cat:'apotek',st:'closed',today:'Lukket',icon:'💊',bg:'#fce8f3',addr:'Strøget 18',city:'1000 København K',mq:'Matas+Strøget',week:[{d:'Mandag',t:'10:00–18:00',s:'n'},{d:'Tirsdag',t:'10:00–18:00',s:'n'},{d:'Onsdag',t:'10:00–18:00',s:'n'},{d:'Torsdag',t:'10:00–18:00',s:'n'},{d:'Fredag',t:'10:00–18:00',s:'n'},{d:'Lørdag',t:'10:00–15:00',s:'n'},{d:'Søndag — påske',t:'Lukket',s:'c',td:true}]},
+  {name:'Elgiganten',type:'Elektronik',cat:'elektronik',st:'limited',today:'11:00 – 17:00',icon:'💻',bg:'#eff4ff',addr:'Axeltorv 2',city:'1609 København V',mq:'Elgiganten+Axeltorv',week:[{d:'Mandag',t:'10:00–20:00',s:'n'},{d:'Tirsdag',t:'10:00–20:00',s:'n'},{d:'Onsdag',t:'10:00–20:00',s:'n'},{d:'Torsdag',t:'10:00–20:00',s:'n'},{d:'Fredag',t:'10:00–20:00',s:'n'},{d:'Lørdag',t:'10:00–18:00',s:'n'},{d:'Søndag — påske',t:'11:00–17:00',s:'l',td:true}]},
+  {name:'H&M',type:'Tøj & mode',cat:'tøj',st:'closed',today:'Lukket',icon:'👕',bg:'#f3f0ff',addr:'Amagertorv 5',city:'1160 København K',mq:'H%26M+Amagertorv',week:[{d:'Mandag',t:'10:00–19:00',s:'n'},{d:'Tirsdag',t:'10:00–19:00',s:'n'},{d:'Onsdag',t:'10:00–19:00',s:'n'},{d:'Torsdag',t:'10:00–19:00',s:'n'},{d:'Fredag',t:'10:00–19:00',s:'n'},{d:'Lørdag',t:'10:00–17:00',s:'n'},{d:'Søndag — påske',t:'Lukket',s:'c',td:true}]},
+  {name:'SuperBrugsen',type:'Dagligvarer',cat:'dagligvarer',st:'open',today:'09:00 – 17:00',icon:'🥦',bg:'#eaf5f0',addr:'Jagtvej 111',city:'2200 København N',mq:'SuperBrugsen+Jagtvej',week:[{d:'Mandag',t:'08:00–21:00',s:'n'},{d:'Tirsdag',t:'08:00–21:00',s:'n'},{d:'Onsdag',t:'08:00–21:00',s:'n'},{d:'Torsdag',t:'08:00–21:00',s:'n'},{d:'Fredag',t:'08:00–21:00',s:'n'},{d:'Lørdag',t:'08:00–18:00',s:'n'},{d:'Søndag — påske',t:'09:00–17:00',s:'l',td:true}]},
+  {name:'Normal',type:'Apotek & pleje',cat:'apotek',st:'open',today:'10:00 – 16:00',icon:'🧴',bg:'#fce8f3',addr:'Strøget 52',city:'1000 København K',mq:'Normal+Strøget',week:[{d:'Mandag',t:'10:00–19:00',s:'n'},{d:'Tirsdag',t:'10:00–19:00',s:'n'},{d:'Onsdag',t:'10:00–19:00',s:'n'},{d:'Torsdag',t:'10:00–19:00',s:'n'},{d:'Fredag',t:'10:00–19:00',s:'n'},{d:'Lørdag',t:'10:00–17:00',s:'n'},{d:'Søndag — påske',t:'10:00–16:00',s:'l',td:true}]},
+  {name:'Zara',type:'Tøj & mode',cat:'tøj',st:'closed',today:'Lukket',icon:'👗',bg:'#f3f0ff',addr:'Vimmelskaftet 44',city:'1161 København K',mq:'Zara+Vimmelskaftet',week:[{d:'Mandag',t:'10:00–19:30',s:'n'},{d:'Tirsdag',t:'10:00–19:30',s:'n'},{d:'Onsdag',t:'10:00–19:30',s:'n'},{d:'Torsdag',t:'10:00–19:30',s:'n'},{d:'Fredag',t:'10:00–19:30',s:'n'},{d:'Lørdag',t:'10:00–18:00',s:'n'},{d:'Søndag — påske',t:'Lukket',s:'c',td:true}]},
+];
+let af='alle',oid=null;
+function bc(s){return s==='open'?'bo':s==='limited'?'bl':'bc';}
+function bl(s){return s==='open'?'Åben':s==='limited'?'Begrænset':'Lukket';}
+function tc(s){return s==='c'?'off':s==='l'?'lim':'';}
+function setF(el,f){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');af=f;oid=null;render();}
+function qs(q){document.getElementById('si').value=q;render();}
+function render(){
+  const q=document.getElementById('si').value.toLowerCase();
+  const list=document.getElementById('list');
+  list.innerHTML='';
+  const res=S.filter(s=>(af==='alle'||s.cat===af)&&(s.name.toLowerCase().includes(q)||s.addr.toLowerCase().includes(q)||s.city.toLowerCase().includes(q)));
+  res.forEach((s,i)=>{
+    if(i===3&&af==='alle'&&!q){
+      const n=document.createElement('div');
+      n.className='native';
+      n.innerHTML=`<span class="native-tag">Annonce</span><div class="native-icon" style="background:#eaf5f0">🛒</div><div><div class="native-title">Bestil online — leveret på 30 min</div><div class="native-sub">Butikken lukket? Nemlig.com leverer hele påsken.</div></div>`;
+      list.appendChild(n);
+    }
+    const isO=oid===s.name;
+    const w=document.createElement('div');
+    w.className='srow';
+    w.innerHTML=`
+      <div class="srow-main" onclick="tog('${s.name}')">
+        <div class="srow-icon" style="background:${s.bg}">${s.icon}</div>
+        <div>
+          <div class="srow-name">${s.name}</div>
+          <div class="srow-addr">${s.addr}, ${s.city}</div>
+          <div class="srow-time">${s.today}</div>
+        </div>
+        <div class="srow-right">
+          <span class="badge ${bc(s.st)}">${bl(s.st)}</span>
+          <span class="chev${isO?' up':''}">▾</span>
+        </div>
+      </div>
+      <div class="drawer${isO?' open':''}">
+        <div class="drawer-in">
+          <div>
+            <div class="dlabel">Adresse</div>
+            <div class="daddr">${s.addr}</div>
+            <div class="dcity">${s.city}</div>
+            <a class="dmap" href="https://maps.google.com/?q=${s.mq}" target="_blank" rel="noopener">Åbn i Google Maps →</a>
+          </div>
+          <div>
+            <div class="dlabel">Åbningstider denne uge</div>
+            <table class="htable">${s.week.map(w=>`<tr${w.td?' class="td-today"':''}><td class="hday">${w.d}</td><td class="htime ${tc(w.s)}">${w.t}</td></tr>`).join('')}</table>
+          </div>
+          <div class="dfooter">
+            <button class="rptbtn">Rapporter forkert tid</button>
+            <button class="sharebtn">Del butik</button>
+          </div>
+        </div>
+      </div>`;
+    list.appendChild(w);
+  });
+  if(!res.length) list.innerHTML='<div style="padding:2rem;text-align:center;color:var(--ink-3);font-size:14px;">Ingen butikker fundet — prøv en anden søgning</div>';
+}
+function tog(n){oid=oid===n?null:n;render();}
+render();
+setTimeout(()=>document.getElementById('pop').classList.add('show'),4000);
+</script>
+</body>
+</html>

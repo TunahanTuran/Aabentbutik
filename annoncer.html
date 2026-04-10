@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Annoncér på Åbentbutik.dk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:#0e0e0d;--ink-2:#444;--ink-3:#888;--ink-4:#bbb;
+      --green:#1c7a5e;--green-bg:#eaf5f0;--green-dark:#104a38;
+      --line:#e8e8e4;--line-mid:#d4d4ce;
+      --surface:#fff;--page:#f5f5f1;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.06),0 3px 10px rgba(0,0,0,.04);
+      --shadow-md:0 2px 4px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--page); color:var(--ink); font-size:15px; line-height:1.6; }
+
+    nav { background:var(--surface); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40; }
+    .nav-inner { max-width:1040px; margin:0 auto; padding:0 2rem; height:56px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-family:'Fraunces',serif; font-size:21px; font-weight:300; color:var(--ink); text-decoration:none; }
+    .logo i { font-style:italic; color:var(--green); }
+    .back { font-size:13px; font-weight:500; color:var(--ink-3); text-decoration:none; }
+    .back:hover { color:var(--ink); }
+
+    /* HERO */
+    .hero { background:var(--ink); padding:5rem 2rem 4.5rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 70% at 50% 100%, rgba(28,122,94,0.2) 0%, transparent 70%); pointer-events:none; }
+    .hero-kicker { font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--green); margin-bottom:1rem; position:relative; }
+    .hero h1 { font-family:'Fraunces',serif; font-size:clamp(34px,5vw,54px); font-weight:300; line-height:1.1; letter-spacing:-1px; color:#fff; margin-bottom:1.25rem; position:relative; }
+    .hero h1 i { font-style:italic; color:#6edbb8; }
+    .hero-sub { font-size:16px; color:rgba(255,255,255,0.55); max-width:500px; margin:0 auto; line-height:1.65; position:relative; }
+
+    /* STATS BAR */
+    .stats-bar { background:var(--surface); border-bottom:1px solid var(--line); }
+    .stats-inner { max-width:1040px; margin:0 auto; padding:1.5rem 2rem; display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+    .stat { text-align:center; }
+    .stat-n { font-family:'Fraunces',serif; font-size:36px; font-weight:300; font-style:italic; color:var(--green); letter-spacing:-1px; line-height:1; }
+    .stat-l { font-size:13px; color:var(--ink-3); margin-top:4px; }
+
+    /* SECTIONS */
+    .sec { max-width:1040px; margin:3rem auto; padding:0 2rem; }
+    .sec-label { font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); margin-bottom:0.75rem; }
+    .sec-title { font-family:'Fraunces',serif; font-size:30px; font-weight:300; color:var(--ink); margin-bottom:0.5rem; line-height:1.2; }
+    .sec-title i { font-style:italic; }
+    .sec-sub { font-size:15px; color:var(--ink-2); max-width:560px; line-height:1.65; margin-bottom:2rem; }
+
+    /* AD FORMATS */
+    .formats { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-bottom:3rem; }
+    .format-card { background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm); }
+    .format-preview { height:160px; display:flex; align-items:center; justify-content:center; background:var(--page); border-bottom:1px solid var(--line); padding:1rem; }
+    .format-body { padding:1.25rem; }
+    .format-name { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+    .format-desc { font-size:13px; color:var(--ink-2); line-height:1.5; margin-bottom:10px; }
+    .format-price { font-size:13px; font-weight:600; color:var(--green); }
+
+    /* MOCK ADS */
+    .mock-banner { background:var(--green-bg); border:1px dashed rgba(28,122,94,0.3); border-radius:8px; width:100%; height:70px; display:flex; align-items:center; gap:12px; padding:0 14px; }
+    .mock-logo { width:36px; height:36px; border-radius:8px; background:var(--green); display:grid; place-items:center; color:#fff; font-size:14px; font-weight:700; flex-shrink:0; }
+    .mock-copy { flex:1; }
+    .mock-title { font-size:12px; font-weight:600; color:var(--ink); }
+    .mock-sub { font-size:11px; color:var(--ink-2); margin-top:1px; }
+    .mock-cta { font-size:11px; font-weight:600; padding:5px 12px; background:var(--green); color:#fff; border-radius:5px; white-space:nowrap; }
+
+    .mock-native { background:#fafaf6; border:1px solid var(--line); border-radius:8px; width:100%; padding:10px 12px; display:flex; gap:10px; align-items:center; position:relative; }
+    .mock-native-icon { width:32px; height:32px; border-radius:7px; background:#fff3e0; display:grid; place-items:center; font-size:16px; flex-shrink:0; }
+    .mock-native-tag { position:absolute; top:5px; right:8px; font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-4); }
+    .mock-native-title { font-size:12px; font-weight:600; color:var(--ink); }
+    .mock-native-sub { font-size:11px; color:var(--ink-2); margin-top:1px; }
+
+    .mock-sidebar { background:#fff8f0; border:1px solid #fde4b8; border-radius:8px; width:140px; padding:12px; text-align:center; }
+    .mock-sidebar-img { width:100%; height:50px; background:#f5a623; border-radius:6px; margin-bottom:8px; display:grid; place-items:center; font-size:20px; }
+    .mock-sidebar-title { font-size:11px; font-weight:600; color:#5a2d00; }
+    .mock-sidebar-sub { font-size:10px; color:#7a4a10; margin-top:2px; }
+    .mock-sidebar-cta { width:100%; margin-top:8px; padding:5px; font-size:10px; font-weight:600; background:#e8761a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+    /* HOW IT WORKS */
+    .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:3rem; }
+    .step { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; box-shadow:var(--shadow-sm); position:relative; }
+    .step-num { font-family:'Fraunces',serif; font-size:32px; font-weight:300; font-style:italic; color:var(--line-mid); line-height:1; margin-bottom:0.75rem; }
+    .step-title { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+    .step-text { font-size:13px; color:var(--ink-2); line-height:1.55; }
+
+    /* FORM */
+    .form-layout { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; align-items:start; }
+    .form-card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:2rem; box-shadow:var(--shadow-md); }
+    .form-card-title { font-family:'Fraunces',serif; font-size:22px; font-weight:300; color:var(--ink); margin-bottom:1.5rem; }
+    .form-card-title i { font-style:italic; }
+    .fgroup { margin-bottom:1.25rem; }
+    .flabel { font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:6px; }
+    .req { color:var(--green); }
+    .finput { width:100%; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--line-mid); border-radius:8px; color:var(--ink); background:var(--surface); transition:border-color 0.15s; }
+    .finput:focus { outline:none; border-color:var(--green); }
+    .fselect { width:100%; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--line-mid); border-radius:8px; color:var(--ink); background:var(--surface); appearance:none; cursor:pointer; }
+    .fselect:focus { outline:none; border-color:var(--green); }
+    .ftextarea { width:100%; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--line-mid); border-radius:8px; color:var(--ink); background:var(--surface); resize:vertical; min-height:80px; transition:border-color 0.15s; }
+    .ftextarea:focus { outline:none; border-color:var(--green); }
+    .frow { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .fdivider { border:none; border-top:1px solid var(--line); margin:1.5rem 0; }
+
+    /* FORMAT PICKER */
+    .format-picker { display:flex; flex-direction:column; gap:8px; }
+    .fp-item { border:1.5px solid var(--line-mid); border-radius:10px; padding:12px 14px; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:12px; }
+    .fp-item:hover { border-color:var(--green); }
+    .fp-item.selected { border-color:var(--green); background:var(--green-bg); }
+    .fp-radio { width:16px; height:16px; border-radius:50%; border:2px solid var(--line-mid); flex-shrink:0; display:grid; place-items:center; transition:all 0.15s; }
+    .fp-item.selected .fp-radio { border-color:var(--green); background:var(--green); }
+    .fp-item.selected .fp-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+    .fp-name { font-size:13px; font-weight:600; color:var(--ink); }
+    .fp-price { font-size:12px; color:var(--ink-3); margin-top:1px; }
+
+    /* UPLOAD ZONE */
+    .upload-zone { border:2px dashed var(--line-mid); border-radius:10px; padding:1.5rem; text-align:center; cursor:pointer; transition:all 0.15s; background:var(--page); }
+    .upload-zone:hover { border-color:var(--green); background:var(--green-bg); }
+    .upload-icon { font-size:28px; margin-bottom:8px; }
+    .upload-title { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+    .upload-sub { font-size:12px; color:var(--ink-3); }
+    .upload-spec { font-size:11px; color:var(--ink-4); margin-top:6px; }
+
+    /* PREVIEW PANEL */
+    .preview-panel { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; box-shadow:var(--shadow-sm); position:sticky; top:72px; }
+    .preview-title { font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); margin-bottom:1rem; }
+    .preview-area { background:var(--page); border:1px solid var(--line); border-radius:8px; padding:1rem; min-height:120px; display:flex; align-items:center; justify-content:center; }
+    .preview-placeholder { font-size:13px; color:var(--ink-4); text-align:center; }
+    .preview-note { font-size:12px; color:var(--ink-3); margin-top:10px; line-height:1.5; }
+
+    /* LIVE PREVIEW AD */
+    .live-banner { background:var(--green-bg); border:1px solid rgba(28,122,94,0.2); border-radius:8px; width:100%; padding:10px 12px; display:flex; align-items:center; gap:10px; }
+    .lb-logo { width:32px; height:32px; border-radius:7px; background:var(--green); display:grid; place-items:center; color:#fff; font-size:11px; font-weight:700; flex-shrink:0; }
+    .lb-title { font-size:12px; font-weight:600; color:var(--ink); }
+    .lb-sub { font-size:11px; color:var(--ink-2); margin-top:1px; }
+    .lb-cta { font-size:10px; font-weight:600; padding:4px 10px; background:var(--green); color:#fff; border-radius:4px; white-space:nowrap; margin-left:auto; }
+
+    .submit-btn { width:100%; padding:14px; background:var(--green); color:#fff; font-size:15px; font-weight:600; border:none; border-radius:10px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.15s; margin-top:0.5rem; }
+    .submit-btn:hover { background:var(--green-dark); }
+    .form-disclaimer { font-size:12px; color:var(--ink-3); text-align:center; margin-top:10px; line-height:1.5; }
+
+    /* SUCCESS */
+    .success { display:none; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:3rem 2rem; text-align:center; box-shadow:var(--shadow-md); }
+    .success.show { display:block; }
+    .success-icon { font-size:48px; margin-bottom:1rem; }
+    .success-title { font-family:'Fraunces',serif; font-size:26px; font-weight:300; color:var(--ink); margin-bottom:8px; }
+    .success-title i { font-style:italic; color:var(--green); }
+    .success-sub { font-size:15px; color:var(--ink-2); max-width:420px; margin:0 auto; line-height:1.6; }
+
+    /* ASIDE INFO */
+    .info-card { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:1.5rem; box-shadow:var(--shadow-sm); margin-bottom:1rem; }
+    .info-title { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:10px; }
+    .info-list { display:flex; flex-direction:column; gap:8px; }
+    .info-item { font-size:13px; color:var(--ink-2); display:flex; gap:8px; align-items:flex-start; line-height:1.5; }
+    .info-item::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+
+    /* FOOTER */
+    footer { background:var(--surface); border-top:1px solid var(--line); padding:2rem; text-align:center; margin-top:3rem; }
+    .foot-brand { font-family:'Fraunces',serif; font-size:18px; font-weight:300; color:var(--ink); }
+    .foot-brand i { font-style:italic; color:var(--green); }
+    .foot-sub { font-size:13px; color:var(--ink-3); margin-top:4px; }
+
+    @media(max-width:700px) { .formats{grid-template-columns:1fr} .steps{grid-template-columns:1fr 1fr} .form-layout{grid-template-columns:1fr} .stats-inner{grid-template-columns:1fr} .frow{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">åbent<i>butik</i></a>
+    <a href="index.html" class="back">← Tilbage til forsiden</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-kicker">Annoncér på åbentbutik.dk</div>
+  <h1>Nå kunder<br>når de <i>beslutter sig</i></h1>
+  <p class="hero-sub">Dine annoncer vises til danskere der aktivt søger efter åbne butikker — det er det mest relevante tidspunkt at nå dem.</p>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-n">50k+</div>
+      <div class="stat-l">Månedlige besøgende</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">8x</div>
+      <div class="stat-l">Mere trafik på helligdage</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">92%</div>
+      <div class="stat-l">Søger inden de handler</div>
+    </div>
+  </div>
+</div>
+
+<!-- AD FORMATS -->
+<section class="sec">
+  <div class="sec-label">Annonceformater</div>
+  <div class="sec-title">Vælg det format der <i>passer dig</i></div>
+  <p class="sec-sub">Vi har tre formater. Du leverer tekst og logo — vi sørger for at det ser professionelt ud på siden.</p>
+
+  <div class="formats">
+    <div class="format-card">
+      <div class="format-preview">
+        <div class="mock-banner">
+          <div class="mock-logo">N</div>
+          <div class="mock-copy">
+            <div class="mock-title">Netto — åbent i dag til 20:00</div>
+            <div class="mock-sub">Find din nærmeste Netto og se tilbud</div>
+          </div>
+          <div class="mock-cta">Se tilbud</div>
+        </div>
+      </div>
+      <div class="format-body">
+        <div class="format-name">Topbanner</div>
+        <div class="format-desc">Vises øverst på forsiden. Høj synlighed og klikrate. Inkluderer logo, overskrift, undertekst og call-to-action.</div>
+        <div class="format-price">Fra 1.500 kr/md</div>
+      </div>
+    </div>
+
+    <div class="format-card">
+      <div class="format-preview" style="flex-direction:column;gap:8px;">
+        <div class="mock-native">
+          <span class="mock-native-tag">Annonce</span>
+          <div class="mock-native-icon">🛒</div>
+          <div>
+            <div class="mock-native-title">Bestil online — leveret på 30 min</div>
+            <div class="mock-native-sub">Butikken lukket? Vi leverer hele påsken</div>
+          </div>
+        </div>
+      </div>
+      <div class="format-body">
+        <div class="format-name">Indlejret annonce</div>
+        <div class="format-desc">Vises naturligt imellem butikskortene i listen. Føles som en del af indholdet og giver høj engagement.</div>
+        <div class="format-price">Fra 1.000 kr/md</div>
+      </div>
+    </div>
+
+    <div class="format-card">
+      <div class="format-preview">
+        <div class="mock-sidebar">
+          <div class="mock-sidebar-img">🍊</div>
+          <div class="mock-sidebar-title">Påsketilbud hos Rema</div>
+          <div class="mock-sidebar-sub">Spar op til 40% denne uge</div>
+          <button class="mock-sidebar-cta">Se tilbud →</button>
+        </div>
+      </div>
+      <div class="format-body">
+        <div class="format-name">Sidekolonne</div>
+        <div class="format-desc">Vises i højre sidekolonne på alle sider. Inkluderer billede, overskrift og knap. Perfekt til tilbudsaktivering.</div>
+        <div class="format-price">Fra 750 kr/md</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec" style="margin-top:0">
+  <div class="sec-label">Sådan fungerer det</div>
+  <div class="sec-title">Fra bestilling til <i>live på siden</i></div>
+  <p class="sec-sub">Du leverer indholdet — vi sørger for at det ser professionelt ud og passer til sidens design.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Udfyld formularen</div>
+      <div class="step-text">Vælg format, skriv din tekst og upload dit logo nedenfor. Det tager 5 minutter.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Vi designer det</div>
+      <div class="step-text">Vi sætter din annonce op i vores skabelon så den passer til sidens stil og ser professionel ud.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Du godkender</div>
+      <div class="step-text">Du får et preview på e-mail inden annoncen går live. Ønsker du ændringer, fikser vi det.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Live på siden</div>
+      <div class="step-text">Annoncen er live inden for 24 timer og du modtager en månedlig rapport med visninger og klik.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="sec" style="margin-top:0" id="bestil">
+  <div class="sec-label">Kom i gang</div>
+  <div class="sec-title">Bestil din <i>annonce</i></div>
+  <div class="form-layout">
+    <div>
+      <div class="form-card" id="formCard">
+        <div class="form-card-title">Udfyld dine <i>annonceoplysninger</i></div>
+
+        <div class="fgroup">
+          <label class="flabel">Virksomhed <span class="req">*</span></label>
+          <input class="finput" type="text" placeholder="fx Netto, Rema 1000..." id="bizName" oninput="updatePreview()"/>
+        </div>
+
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">Kontaktperson <span class="req">*</span></label>
+            <input class="finput" type="text" placeholder="Dit navn"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">E-mail <span class="req">*</span></label>
+            <input class="finput" type="email" placeholder="dig@virksomhed.dk" id="bizEmail"/>
+          </div>
+        </div>
+
+        <hr class="fdivider"/>
+
+        <div class="fgroup">
+          <label class="flabel">Vælg annonceformat <span class="req">*</span></label>
+          <div class="format-picker">
+            <div class="fp-item selected" onclick="selectFormat(this,'topbanner')">
+              <div class="fp-radio"></div>
+              <div><div class="fp-name">Topbanner — Fra 1.500 kr/md</div><div class="fp-price">Vises øverst på forsiden</div></div>
+            </div>
+            <div class="fp-item" onclick="selectFormat(this,'indlejret')">
+              <div class="fp-radio"></div>
+              <div><div class="fp-name">Indlejret annonce — Fra 1.000 kr/md</div><div class="fp-price">Vises imellem butikskortene</div></div>
+            </div>
+            <div class="fp-item" onclick="selectFormat(this,'sidekolonne')">
+              <div class="fp-radio"></div>
+              <div><div class="fp-name">Sidekolonne — Fra 750 kr/md</div><div class="fp-price">Vises i højre sidekolonne</div></div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="fdivider"/>
+
+        <div class="fgroup">
+          <label class="flabel">Overskrift til annoncen <span class="req">*</span></label>
+          <input class="finput" type="text" placeholder="fx Netto — åbent i dag til 20:00" id="adTitle" oninput="updatePreview()" maxlength="60"/>
+          <div style="font-size:11px;color:var(--ink-4);margin-top:5px;">Maks. 60 tegn — hold den kort og konkret</div>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Undertekst</label>
+          <input class="finput" type="text" placeholder="fx Find din nærmeste Netto og se tilbud" id="adSub" oninput="updatePreview()" maxlength="80"/>
+          <div style="font-size:11px;color:var(--ink-4);margin-top:5px;">Maks. 80 tegn</div>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Knaptekst</label>
+          <input class="finput" type="text" placeholder="fx Se tilbud, Find butik, Bestil nu..." id="adCta" oninput="updatePreview()" maxlength="20"/>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Link (klik fører brugeren til)</label>
+          <input class="finput" type="url" placeholder="https://..."/>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Upload logo</label>
+          <div class="upload-zone" onclick="document.getElementById('logoUpload').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-title" id="uploadTitle">Klik for at uploade logo</div>
+            <div class="upload-sub">PNG eller SVG med transparent baggrund foretrækkes</div>
+            <div class="upload-spec">Anbefalet størrelse: min. 200×200px</div>
+          </div>
+          <input type="file" id="logoUpload" accept="image/*" style="display:none" onchange="handleLogoUpload(this)"/>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel">Særlige ønsker eller noter</label>
+          <textarea class="ftextarea" placeholder="fx 'Skal kun vises i påskeugen' eller 'Brug venligst vores brandfarve #FF0000'"></textarea>
+        </div>
+
+        <button class="submit-btn" onclick="submitAd()">Send annoncebestilling →</button>
+        <div class="form-disclaimer">Vi vender tilbage inden for 1 arbejdsdag med et preview til godkendelse.</div>
+      </div>
+
+      <div class="success" id="successCard">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Bestilling <i>modtaget!</i></div>
+        <div class="success-sub">Vi designer din annonce og sender et preview til din e-mail inden for 1 arbejdsdag. Har du spørgsmål, skriv til kontakt@åbentbutik.dk.</div>
+      </div>
+    </div>
+
+    <!-- ASIDE -->
+    <div>
+      <div class="preview-panel" id="previewPanel">
+        <div class="preview-title">Live preview</div>
+        <div class="preview-area" id="previewArea">
+          <div class="preview-placeholder">Udfyld formularen for at se et preview af din annonce</div>
+        </div>
+        <div class="preview-note">Sådan vil din annonce se ud på siden. Det endelige design sendes til godkendelse pr. e-mail.</div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div class="info-card">
+          <div class="info-title">Det er inkluderet</div>
+          <div class="info-list">
+            <div class="info-item">Professionelt design der passer til siden</div>
+            <div class="info-item">Preview til godkendelse inden publicering</div>
+            <div class="info-item">Gratis ændringer inden for 48 timer</div>
+            <div class="info-item">Månedlig rapport med visninger og klik</div>
+            <div class="info-item">Ingen binding — opsig når du vil</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-title">Spørgsmål?</div>
+          <div style="font-size:13px;color:var(--ink-2);line-height:1.6;">Skriv til <a href="mailto:kontakt@åbentbutik.dk" style="color:var(--green);font-weight:600;">kontakt@åbentbutik.dk</a> — vi svarer inden for 24 timer.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-brand">åbent<i>butik</i></div>
+  <div class="foot-sub">© 2026 Åbentbutik.dk — Bygget i Danmark 🇩🇰</div>
+</footer>
+
+<script>
+let selectedFormat = 'topbanner';
+
+function selectFormat(el, fmt) {
+  document.querySelectorAll('.fp-item').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedFormat = fmt;
+  updatePreview();
+}
+
+function updatePreview() {
+  const biz = document.getElementById('bizName').value || 'Din virksomhed';
+  const title = document.getElementById('adTitle').value || 'Din overskrift vises her';
+  const sub = document.getElementById('adSub').value || 'Din undertekst vises her';
+  const cta = document.getElementById('adCta').value || 'Se mere';
+  const area = document.getElementById('previewArea');
+  const initial = biz.trim() ? biz.trim()[0].toUpperCase() : '?';
+
+  if (selectedFormat === 'topbanner') {
+    area.innerHTML = `
+      <div class="live-banner" style="width:100%">
+        <div class="lb-logo">${initial}</div>
+        <div style="flex:1;min-width:0">
+          <div class="lb-title">${title}</div>
+          <div class="lb-sub">${sub}</div>
+        </div>
+        <div class="lb-cta">${cta}</div>
+      </div>`;
+  } else if (selectedFormat === 'indlejret') {
+    area.innerHTML = `
+      <div style="background:#fafaf6;border:1px solid var(--line);border-radius:8px;width:100%;padding:10px 12px;display:flex;gap:10px;align-items:center;position:relative;">
+        <span style="position:absolute;top:5px;right:8px;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-4)">Annonce</span>
+        <div style="width:32px;height:32px;border-radius:7px;background:var(--green);display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0">${initial}</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink)">${title}</div>
+          <div style="font-size:11px;color:var(--ink-2);margin-top:1px">${sub}</div>
+        </div>
+      </div>`;
+  } else {
+    area.innerHTML = `
+      <div style="background:#fff8f0;border:1px solid #fde4b8;border-radius:8px;width:140px;padding:12px;text-align:center;">
+        <div style="width:100%;height:48px;background:var(--green);border-radius:6px;margin-bottom:8px;display:grid;place-items:center;color:#fff;font-size:20px;font-weight:700">${initial}</div>
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${title.substring(0,30)}</div>
+        <div style="font-size:11px;color:var(--ink-2);margin-top:3px">${sub.substring(0,40)}</div>
+        <div style="width:100%;margin-top:8px;padding:5px;font-size:11px;font-weight:600;background:var(--green);color:#fff;border-radius:4px;font-family:'DM Sans',sans-serif">${cta}</div>
+      </div>`;
+  }
+}
+
+function handleLogoUpload(input) {
+  if (input.files && input.files[0]) {
+    document.getElementById('uploadTitle').textContent = '✓ ' + input.files[0].name;
+  }
+}
+
+function submitAd() {
+  const biz = document.getElementById('bizName').value.trim();
+  const email = document.getElementById('bizEmail').value.trim();
+  if (!biz || !email) { alert('Udfyld venligst virksomhedsnavn og e-mail.'); return; }
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successCard').classList.add('show');
+  window.scrollTo({ top: document.getElementById('bestil').offsetTop - 80, behavior: 'smooth' });
+}
+
+updatePreview();
+</script>
+</body>
+</html>
